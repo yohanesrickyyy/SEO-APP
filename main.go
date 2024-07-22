@@ -25,6 +25,16 @@ func rearrangeSentence(input string) string {
 	return input
 }
 
+// Fungsi untuk mengganti spasi dengan karakter tertentu
+func replaceSpaces(input, replacement string) string {
+	for phrase := range spasi {
+		if strings.Contains(strings.ToLower(input), phrase) {
+			input = strings.ReplaceAll(input, phrase, strings.ReplaceAll(phrase, " ", replacement))
+		}
+	}
+	return input
+}
+
 func main() {
 	// Buat file output
 	outputFile, err := os.Create("output.txt")
@@ -36,10 +46,14 @@ func main() {
 
 	writer := bufio.NewWriter(outputFile)
 
+	// Variable untuk karakter pengganti spasi
+	replacementChar := "="
+
 	// Proses setiap kalimat dalam sentences
 	for _, sentence := range sentences {
 		modified := rearrangeSentence(sentence)
-		_, err := writer.WriteString(modified + "\n")
+		modifiedWithReplacement := replaceSpaces(modified, replacementChar)
+		_, err := writer.WriteString(modifiedWithReplacement + "\n")
 		if err != nil {
 			fmt.Println("Error writing to file:", err)
 			return
